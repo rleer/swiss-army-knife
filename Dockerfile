@@ -53,5 +53,11 @@ RUN apt-get update && \
     ln -s /usr/local/bin/kubectl-1.30 /usr/local/bin/kubectl && \
     mkdir -p /root/.kube && \
     # Install yq
-    wget "https://github.com/mikefarah/yq/releases/download/v4.44.1/yq_linux_$(dpkg --print-architecture)" -O /usr/bin/yq && \
-    chmod +x /usr/bin/yq
+    wget "https://github.com/mikefarah/yq/releases/latest/download/yq_linux_$(dpkg --print-architecture)" -O /usr/bin/yq && \
+    chmod +x /usr/local/bin/yq && \
+    # Install traefik whoami
+    wget "https://github.com/traefik/whoami/releases/latest/download/whoami_$(curl -s https://api.github.com/repos/traefik/whoami/releases/latest | jq -r '.tag_name')_linux_$(dpkg --print-architecture).tar.gz" -O /tmp/whoami.tar.gz && \
+    tar -C /usr/local/bin -xzf /tmp/whoami.tar.gz && \
+    rm /tmp/whoami.tar.gz
+
+CMD ["/usr/local/bin/whoami"] 
