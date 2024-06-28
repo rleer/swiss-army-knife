@@ -5,9 +5,7 @@ metadata:
   labels:
     {{- include "swiss-army-knife.labels" . | nindent 4 }}
 spec:
-  {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
-  {{- end }}
   selector:
     matchLabels:
       {{- include "swiss-army-knife.selectorLabels" . | nindent 6 }}
@@ -50,6 +48,9 @@ spec:
           volumeMounts:
             {{- toYaml . | nindent 12 }}
           {{- end }}
+          env:
+            - name: WHOAMI_PORT_NUMBER
+              value: {{ .Values.service.port | quote }}
       {{- with .Values.volumes }}
       volumes:
         {{- toYaml . | nindent 8 }}
